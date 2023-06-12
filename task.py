@@ -1,4 +1,5 @@
 import re
+from string import ascii_letters
 
 
 class Student:
@@ -33,39 +34,45 @@ def check_credentials(first_name, last_name, email):
     return True
 
 
+def add_students():
+    students_list = []
+    while True:
+        credentials = list(input().split())
+        if ''.join(credentials) == 'back':
+            print(f'Total {len(students_list)} students have been added.')
+            return main()
+        elif len(credentials) < 3:
+            print("Incorrect credentials.")
+            continue
+
+        concatenated_string = ' '.join(credentials[1:-1])
+        credentials[1:-1] = [concatenated_string]
+        student = Student(credentials[0], credentials[1], credentials[2])
+        if check_credentials(student.first_name, student.last_name, student.email):
+            students_list.append(student)
+            print('The student has been added.')
+
+
 def main():
     print("Learning Progress Tracker")
 
     while True:
         command = input()
-        if command == 'exit':
-            print('Bye!')
-            break
-        elif command == '' or command.isspace():
-            print('No input.')
-        elif command == 'add students':
+        if command == "add students":
             print("Enter student credentials or 'back' to return:")
-            students_list = []
-
-            while True:
-                credentials = [word for word in input().split()]
-                if len(credentials) != 0 and credentials[0] == 'back':
-                    break
-                if len(credentials) <= 2:
-                    print("Incorrect credentials.")
-                else:
-                    if len(credentials) > 3:
-                        concatenated_string = ' '.join(credentials[1:-1])
-                        credentials[1:-1] = [concatenated_string]
-                    student = Student(credentials[0], credentials[1], credentials[2])
-                    if check_credentials(student.first_name, student.last_name, student.email):
-                        students_list.append(student)
-                        print('The student has been added.')
-            print(f'Total {len(students_list)} students have been added.')
-        elif command == 'back':
+            return add_students()
+        elif command == "back":
             print("Enter 'exit' to exit the program.")
-        else:
-            print('Error: unknown command!')
+            continue
+        elif command == "exit":
+            print("Bye!")
+            break
+        elif all(map(lambda j: j not in ascii_letters, command)):
+            print("No input.")
+            continue
+
+        print("Error: unknown command!")
+        continue
 
 
 if __name__ == '__main__':
