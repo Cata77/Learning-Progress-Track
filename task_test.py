@@ -26,3 +26,9 @@ class TestTask(unittest.TestCase):
         self.assertEqual(task.check_email('jdoe@mailnet'), False)
         self.assertEqual(task.check_email('@mailnet'), False)
         self.assertEqual(task.check_email('@mail.net'), False)
+
+    def test_check_points_format(self):
+        self.assertEqual(task.check_points_format(['1', '2', '3', '4']), True)
+        self.assertEqual(task.check_points_format(['1', '2', '3']), False)
+        self.assertEqual(task.check_points_format(['?', '2', '3', '4']), False)
+        self.assertEqual(task.check_points_format(['-1', '2', '3', '4']), False)
