@@ -5,6 +5,7 @@ from string import ascii_letters
 
 students_points = {}
 courses_activity = {'Python': 0, 'DSA': 0, 'Databases': 0, 'Flask': 0}
+points_to_complete_course = {'Python': 600, 'DSA': 400, 'Databases': 480, 'Flask': 550}
 
 
 class Student:
@@ -127,9 +128,27 @@ def compute_statistic():
                   str(round(calculate_percentage(int(sorted_dict[element][position]), search_for_course), 1)) + '%'))
 
 
+def notify_student():
+    counter = 0
+    for student in students_points:
+        ok = False
+        i = 0
+        for points, course in zip(students_points[student], points_to_complete_course):
+            if points >= points_to_complete_course[course]:
+                print(f'To: {student.email}')
+                print('Re: Your Learning Progress')
+                print(f'Hello, {student.first_name} {student.last_name}! You have accomplished our {course} course!')
+                students_points[student][i] = 0
+                ok = True
+            i += 1
+        if ok:
+            counter += 1
+    print(f'Total {counter} students have been notified.')
+    return main()
+
+
 def calculate_percentage(points, course):
-    points_to_complete = {'Python': 600, 'DSA': 400, 'Databases': 480, 'Flask': 550}
-    return points * 100 / points_to_complete[course]
+    return points * 100 / points_to_complete_course[course]
 
 
 def find_position(course):
@@ -254,6 +273,8 @@ def main():
         elif command == "statistics":
             print("Type the name of a course to see details or 'back' to quit:")
             return compute_statistic()
+        elif command == "notify":
+            return notify_student()
         elif command == "exit":
             print("Bye!")
             break
